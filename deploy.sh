@@ -20,7 +20,13 @@ if git fetch -q origin gh-pages 2>/dev/null; then
 else
   PARENT=""
 fi
-TREE=$(git write-tree --prefix=public/) || exit 1
+# Build the site tree from the ON-DISK public/ (tracked sources + untracked
+# generated artifacts) via a throwaway index — write-tree --prefix alone would
+# reflect the tracked-only index and silently drop the generated files.
+TMPIDX="$(mktemp -u)"
+GIT_WORK_TREE="$PWD/public" GIT_INDEX_FILE="$TMPIDX" git add -A
+TREE=$(GIT_INDEX_FILE="$TMPIDX" git write-tree)
+rm -f "$TMPIDX"
 COMMIT=$(printf 'Publish Colony Monitor: live kernel demo (deterministic, client-side)\n\nsite tree of %s\n' "$(git rev-parse --short HEAD)" |
   git commit-tree "$TREE" ${PARENT:+-p "$PARENT"})
 if [ "$PARENT" != "" ] && [ "$COMMIT" = "$(git rev-parse origin/gh-pages)" ]; then
