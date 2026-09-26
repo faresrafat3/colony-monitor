@@ -29,7 +29,9 @@ TREE=$(GIT_INDEX_FILE="$TMPIDX" git write-tree)
 rm -f "$TMPIDX"
 COMMIT=$(printf 'Publish Colony Monitor: live kernel demo (deterministic, client-side)\n\nsite tree of %s\n' "$(git rev-parse --short HEAD)" |
   git commit-tree "$TREE" ${PARENT:+-p "$PARENT"})
-if [ "$PARENT" != "" ] && [ "$COMMIT" = "$(git rev-parse origin/gh-pages)" ]; then
+# No-op check compares TREES (commit shas can never match: commit-tree
+# stamps a new time each run). Identical tree = identical served site.
+if [ "$PARENT" != "" ] && [ "$(git rev-parse "$PARENT^{tree}")" = "$TREE" ]; then
   echo "already current: live content identical — nothing to publish"
 elif git push -q origin "$COMMIT:refs/heads/gh-pages"; then
   echo "published: $COMMIT"
