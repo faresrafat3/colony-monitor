@@ -1,0 +1,13 @@
+{
+  "name": "colony-monitor",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Live verification dashboard for colony-kernel — Nebius x NVIDIA Global AI Hackathon entry",
+  "scripts": {
+    "build:vendor": "cd ../colony-kernel && npm run -s build && cd ../colony-monitor && node build-vendor.mjs",
+    "build": "node build-vendor.mjs && node build.mjs",
+    "verify": "node build.mjs --check",
+    "serve": "python3 -m http.server 8123 -d public"
+  }
+}
