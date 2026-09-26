@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
-# Build + publish Colony Monitor to the gh-pages branch of its repo.
+# THE single entry point: generate + freshness-gate + publish Colony Monitor.
+# Generated artifacts (public/kernel/**, public/colony-driver.mjs) are untracked
+# and rebuilt here every run — the tree cannot go stale silently.
 set -euo pipefail
 cd "$(dirname "$0")"
-[ -z "$(git status --porcelain -- . ':!public/kernel')" ] || { echo "refusing: uncommitted changes (kernel vendor output is exempt)" >&2; exit 1; }
+[ -z "$(git status --porcelain -- . ':!public/kernel' ':!public/colony-driver.mjs')" ] || {
+  echo "refusing: uncommitted changes (generated artifacts are exempt)" >&2; exit 1;
+}
 
-node build-vendor.mjs
-node build.mjs
+node build.mjs   # vendor + assemble + freshness self-check (exits 1 if stale)
 
 WORK="$(mktemp -d)"
 trap 'git worktree remove --force "$WORK" 2>/dev/null || true' EXIT

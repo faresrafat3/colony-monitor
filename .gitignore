@@ -1,1 +1,5 @@
 node_modules/
+
+# generated every build — never tracked (single-source-of-truth: src/ + tracked public/)
+public/kernel/
+public/colony-driver.mjs
