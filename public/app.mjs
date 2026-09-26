@@ -1,4 +1,4 @@
-import { planSteps, runMission } from "./colony-driver.mjs";
+import { planSteps, runMission, lastKernel } from "./colony-driver.mjs";
 
 const $ = (id) => document.getElementById(id);
 const stepsEl = $("steps");
@@ -43,7 +43,10 @@ runBtn.addEventListener("click", async () => {
     // event descriptor (monotonic, equals getEvents().length). Never count UI
     // steps — the kernel logs more events than the stream shows (23 vs 12).
     if (s.event?.seq != null) counts.events = s.event.seq;
-    counts.rejections += s.kind === "denied" && s.label.includes("Illegal") ? 1 : 0;
+    // "durable rejections" mirrors the kernel's own rejection ledger — never
+    // parse UI labels.
+    const rej = lastKernel?.storage.listRejections();
+    if (rej?.ok) counts.rejections = rej.value.length;
     updateState(s, counts);
     $("hash").textContent = s.detail?.startsWith("hash=") ? s.detail.slice(5, 40) + "…" : $("hash").textContent;
     i = Math.min(i + 1, steps.length);

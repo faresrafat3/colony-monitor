@@ -15,6 +15,10 @@ import { ColonyKernel, InMemoryColonyStorage, DeterministicClock, DeterministicI
 const SEED = "colony-monitor-seed-001";
 const FIXED_INSTANT = new Date(Date.UTC(2026, 8, 26, 12, 0, 0)); // fixed clock → deterministic run
 
+// The kernel instance of the most recent runMission() call (ESM live binding).
+// Exported for inspection tooling (verify-facts) — never used for control flow.
+export let lastKernel = null;
+
 function makeKernel() {
   return new ColonyKernel({
     storage: new InMemoryColonyStorage(),
@@ -91,6 +95,7 @@ export function planSteps() {
 
 export async function* runMission() {
   const kernel = makeKernel();
+  lastKernel = kernel;
 
   // 1. create
   const created = kernel.createMission({ title: "Refill prescription across SMS → RCS → email" });
