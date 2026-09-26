@@ -39,7 +39,10 @@ runBtn.addEventListener("click", async () => {
 
   for await (const s of runMission()) {
     addStep(s);
-    counts.events += s.kind === "ok" ? 1 : 0;
+    // "events committed" comes from the kernel itself: missionSequence on each
+    // event descriptor (monotonic, equals getEvents().length). Never count UI
+    // steps — the kernel logs more events than the stream shows (23 vs 12).
+    if (s.event?.seq != null) counts.events = s.event.seq;
     counts.rejections += s.kind === "denied" && s.label.includes("Illegal") ? 1 : 0;
     updateState(s, counts);
     $("hash").textContent = s.detail?.startsWith("hash=") ? s.detail.slice(5, 40) + "…" : $("hash").textContent;
