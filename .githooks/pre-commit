@@ -1,0 +1,3 @@
+#!/bin/sh
+# Gate: repo verification must be green before any commit (see AGENTS.md).
+exec npm run verify
