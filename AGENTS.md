@@ -11,15 +11,15 @@ tools index). This file adds repo identity only, never contradicts it.
 ## Commands
 
 ```
-npm run build:vendor   # vendor assets first (fresh checkout)
-npm run build
-npm run verify         # gate, must be green
+npm run build          # vendor + assemble (needs ../colony-kernel/dist)
+npm test               # driver behavior (run after build)
+npm run verify         # gate: freshness + behavior, must be green
 npm run serve          # local preview
 ```
 
 ## Map
 
-- `build.mjs` · `src/` · `public/` · `deploy.sh`
+- `build.mjs` · `src/` · `public/` · `tests/` · `deploy.sh`
 
 ## Rules
 

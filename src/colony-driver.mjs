@@ -16,7 +16,7 @@ const SEED = "colony-monitor-seed-001";
 const FIXED_INSTANT = new Date(Date.UTC(2026, 8, 26, 12, 0, 0)); // fixed clock → deterministic run
 
 // The kernel instance of the most recent runMission() call (ESM live binding).
-// Exported for inspection tooling (verify-facts) — never used for control flow.
+// Exported for the dashboard's rejection counter; never used for control flow.
 export let lastKernel = null;
 
 function makeKernel() {
@@ -88,8 +88,7 @@ export function planSteps() {
     "Technical review + docs + final gate",
     "✋ Human approval: package",
     "Close mission",
-    "Replay: rebuild state from event log",
-    "Compare event-log hashes",
+    "Replay: rebuild state and compare event-log hashes",
   ];
 }
 

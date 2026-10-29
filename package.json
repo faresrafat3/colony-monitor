@@ -5,9 +5,9 @@
   "type": "module",
   "description": "Live verification dashboard for colony-kernel — Nebius x NVIDIA Global AI Hackathon entry",
   "scripts": {
-    "build:vendor": "cd ../colony-kernel && npm run -s build && cd ../colony-monitor && node build-vendor.mjs",
-    "build": "node build-vendor.mjs && node build.mjs",
-    "verify": "node build.mjs --check",
+    "build": "node build.mjs",
+    "test": "node --test tests/",
+    "verify": "node build.mjs --check && node --test tests/",
     "serve": "python3 -m http.server 8123 -d public"
   }
 }

@@ -6,7 +6,7 @@ models propose, only the kernel commits. Denials are durably recorded as
 evidence, approvals are content-addressed, and a replay rebuilds byte-identical
 state (same event-log hash on every run).
 
-**Live demo:** https://faresrafat3.github.io/colony-monitor/ · **Submission kit (Nebius × NVIDIA):** `career-engine/08-NEBIUS-SUBMISSION.md` in the sibling `career-engine` repo.
+**Live demo:** https://faresrafat3.github.io/colony-monitor/ · **Nebius × NVIDIA Global AI Hackathon entry (2026).**
 
 ## Build from a fresh clone (order matters)
 
@@ -20,7 +20,8 @@ git clone https://github.com/faresrafat3/colony-kernel ../colony-kernel
 # 2. build the kernel (produces dist/, which build.mjs vendors)
 cd ../colony-kernel && npm install && npm run build && cd -
 # 3. generate + verify this repo (fails cleanly if step 2 was skipped)
-node build.mjs
+npm run build
+npm test
 # 4. publish (clean tree required; gh-pages carries the generated artifacts)
 bash deploy.sh
 ```
